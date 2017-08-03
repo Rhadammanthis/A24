@@ -20,7 +20,7 @@ export const getMovieMediaSize = (movieMedia) => {
 
     return(dispatch) => {
 
-        var mapTeacher = (item, done) => {
+        var mapMedia = (item, done) => {
 
             Image.getSize(item.image, (width, height) => {
 
@@ -35,7 +35,7 @@ export const getMovieMediaSize = (movieMedia) => {
             });
         }
 
-        async.map(movieMedia, mapTeacher, function(err, results){
+        async.map(movieMedia, mapMedia, function(err, results){
             console.log("Done! ", results)
             dispatch({ type: GET_MOVIE_MEDIA_SIZE, payload: results})
         });

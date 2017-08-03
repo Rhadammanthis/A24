@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View, Image, TouchableWithoutFeedback, 
-    ScrollView, LayoutAnimation, Button, TouchableNativeFeedback, Linking } from 'react-native';
+    ScrollView, LayoutAnimation, Button, TouchableNativeFeedback,
+    ActivityIndicator, Linking } from 'react-native';
 import Transparency from './common/Transparency'
 import Swiper from 'react-native-swiper';
 import PopupDialog from 'react-native-popup-dialog';
@@ -109,30 +110,43 @@ class MovieDetail extends Component {
         const { image, mediaCaption } = styles;
 
         if(movie.otherMedia){
-            return(
+            if(this.props.mediaLoaded == true)
+                return(
+                    <View>
+                        <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25 }}>
+                            Media
+                        </Text>
+                        <View style={{ }}>
+                            {
+                                this.props.movieMedia.map((item, i) => {                            
+                                    return(
+                                        <View style={{ marginTop: 10}} key={i}>
+                                            <Image key={i} style={ {flex: 1, height: 350 * item.aspectRatio, 
+                                                marginLeft: 25, marginRight: 25,} } resizeMode={ 'contain' }
+                                                source={{ uri: item.media.image }} />
+                                            <Text style={ mediaCaption }>
+                                                {item.media.caption}
+                                            </Text> 
+                                        </View>
+                                    );     
+
+                                })
+                            }
+                        </View>
+                    </View>
+                )
+            else
+                return(
                 <View>
                     <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25 }}>
                         Media
                     </Text>
-                    <View style={{ }}>
-                        {
-                            this.props.movieMedia.map((item, i) => {                            
-                                return(
-                                    <View style={{ marginTop: 10}}>
-                                        <Image key={i} style={ {flex: 1, height: 350 * item.aspectRatio, 
-                                            marginLeft: 25, marginRight: 25,} } resizeMode={ 'contain' }
-                                            source={{ uri: item.media.image }} />
-                                        <Text style={ mediaCaption }>
-                                            {item.media.caption}
-                                        </Text> 
-                                    </View>
-                                );     
-
-                            })
-                        }
-                    </View>
+                    <ActivityIndicator
+                        size="large"
+                        color="grey"
+                    />
                 </View>
-            )
+                )
         }
         return
     }
@@ -246,18 +260,23 @@ const styles = {
         textAlign: 'right',
         marginLeft: 125, 
         marginRight: 25,
-        marginTop: -5,
+        marginTop: 5,
         textShadowColor : '#999'
+    },
+    centering: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 8,
     }
 }
 
 const mapStateToProps = ({ movieList, movieDetail }) => {
 
     const { selectedMovie } = movieList;
-    const { shouldShowFullSynopsis, movieMedia } = movieDetail;
+    const { shouldShowFullSynopsis, movieMedia, mediaLoaded } = movieDetail;
 
     return {
-        selectedMovie, shouldShowFullSynopsis, movieMedia
+        selectedMovie, shouldShowFullSynopsis, movieMedia, mediaLoaded
     };
 };
 

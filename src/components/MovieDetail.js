@@ -158,14 +158,14 @@ class MovieDetail extends Component {
                         <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25, marginTop: 10 }}>
                             Articles
                         </Text>
-                        <View style={{ justifyContent: 'space-around', marginTop: 10, marginBottom: 10,
+                        <View style={{ marginTop: 10, marginBottom: 10,
                             paddingLeft: 25, paddingRight: 25 }}>
                             {
                                 movie.headlines.map((article, i) => {
                                     return (
                                         <View key={i}>
                                             <View style={{ flex:1, height:1, backgroundColor: '#000', marginTop: 10, marginBottom: 10 }} />
-                                            <Text style={ { fontSize: 18 } }>
+                                            <Text style={ { fontSize: 18, fontWeight: '800' } }>
                                                 {article.title}
                                             </Text>
                                             <Image style={{ flex: 1, height: 140, marginTop: 5 }} source={{ uri: article.image}}/>
@@ -186,6 +186,41 @@ class MovieDetail extends Component {
         }
         return
 
+    }
+
+    renderExternalLinks(){
+
+        const { linkDot } = styles;
+
+        if(movie.websites){
+            return (<View>
+                        <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25, marginTop: 10 }}>
+                            External Links
+                        </Text>
+                        <View style={{ justifyContent: 'space-around', marginTop: 10, marginBottom: 10,
+                            paddingLeft: 25, paddingRight: 25 }}>
+                            {
+                                movie.websites.map((externalLink, i) => {
+                                    return (
+                                        <TouchableNativeFeedback key={i}
+                                            onPress={() => { Linking.openURL(externalLink.link) }}>
+                                            <View style={{ marginTop: 10 }}>
+                                                <View style={{ flex:1, height:10, backgroundColor: '#DDD', flexDirection: 'row',
+                                                    justifyContent: 'flex-start', alignItems: 'center' }}>
+                                                    <View style={[ linkDot, { marginLeft: 4 } ]} />
+                                                    <View style={ linkDot } />
+                                                    <View style={ linkDot } />
+                                                </View>
+                                                <Image style={{ flex: 1, height: 170 }} source={{ uri: externalLink.image}}/>
+                                            </View>
+                                        </TouchableNativeFeedback>
+                                    )
+                                })
+                            }
+                        </View>
+                    </View>)
+        }
+        return
     }
 
     render() {
@@ -217,6 +252,7 @@ class MovieDetail extends Component {
                 {this.renderSocial()}
                 {this.renderMedia()}
                 {this.renderArticles()}
+                {this.renderExternalLinks()}
             </ScrollView>
         );
     }
@@ -267,6 +303,14 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 8,
+    },
+    linkDot: {
+        width: 5, 
+        height: 5, 
+        borderRadius: 5/2, 
+        backgroundColor: '#999',
+        marginLeft: 1,
+        marginRight: 1
     }
 }
 

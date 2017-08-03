@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View, Image, TouchableWithoutFeedback, 
-    ScrollView, LayoutAnimation, Button } from 'react-native';
+    ScrollView, LayoutAnimation, Button, TouchableNativeFeedback, Linking } from 'react-native';
 import Transparency from './common/Transparency'
 import Swiper from 'react-native-swiper';
 import PopupDialog from 'react-native-popup-dialog';
-import { toggleFullSynopsis } from '../actions';
+import { toggleFullSynopsis, getMovieMediaSize } from '../actions';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
@@ -22,12 +22,8 @@ class MovieDetail extends Component {
 
         movie = this.props.selectedMovie
 
-        movie.otherMedia.map((item, i) => {
-            Image.getSize(item.image, (width, height) => {
-                item.aspectRatio = (height / width).toFixed(2)
-                console.log('Aspect ratio: ', item.aspectRatio)
-            });
-        })
+        if(movie.otherMedia)
+            this.props.getMovieMediaSize(movie.otherMedia)
     }
 
     renderHeaderItems(){
@@ -110,7 +106,7 @@ class MovieDetail extends Component {
     }
 
     renderMedia(){
-        const { image } = styles;
+        const { image, mediaCaption } = styles;
 
         if(movie.otherMedia){
             return(
@@ -118,17 +114,19 @@ class MovieDetail extends Component {
                     <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25 }}>
                         Media
                     </Text>
-                    <View style={{ marginTop: 10, marginBottom: 10 }}>
+                    <View style={{ }}>
                         {
-                            movie.otherMedia.map((item, i) => {
-                            
-                                Image.getSize(item.image, (width, height) => {
-                                    finalHeight =  (height / width).toFixed(2) * 150
-                                    console.log('Final height', finalHeight)
-                                });
-                                    return <Image key={i} style={ {flex: 1, height: 150, 
-                                    marginLeft: 25, marginRight: 25,} } resizeMode={ 'contain' }
-                                            source={{ uri: item.image }} />
+                            this.props.movieMedia.map((item, i) => {                            
+                                return(
+                                    <View style={{ marginTop: 10}}>
+                                        <Image key={i} style={ {flex: 1, height: 350 * item.aspectRatio, 
+                                            marginLeft: 25, marginRight: 25,} } resizeMode={ 'contain' }
+                                            source={{ uri: item.media.image }} />
+                                        <Text style={ mediaCaption }>
+                                            {item.media.caption}
+                                        </Text> 
+                                    </View>
+                                );     
 
                             })
                         }
@@ -139,9 +137,48 @@ class MovieDetail extends Component {
         return
     }
 
+    renderArticles(){
+
+        if(movie.headlines){
+            return (<View>
+                        <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25, marginTop: 10 }}>
+                            Articles
+                        </Text>
+                        <View style={{ justifyContent: 'space-around', marginTop: 10, marginBottom: 10,
+                            paddingLeft: 25, paddingRight: 25 }}>
+                            {
+                                movie.headlines.map((article, i) => {
+                                    return (
+                                        <View key={i}>
+                                            <View style={{ flex:1, height:1, backgroundColor: '#000', marginTop: 10, marginBottom: 10 }} />
+                                            <Text style={ { fontSize: 18 } }>
+                                                {article.title}
+                                            </Text>
+                                            <Image style={{ flex: 1, height: 140, marginTop: 5 }} source={{ uri: article.image}}/>
+                                            <Text style={{ fontSize: 11, fontWeight: 'bold', marginTop: 5 }}>
+                                                {article.source}
+                                            </Text>
+                                            <TouchableNativeFeedback onPress={() => { Linking.openURL(article.link) }}>
+                                                <Text>
+                                                    {article.summary}
+                                                </Text>
+                                            </TouchableNativeFeedback>
+                                        </View>
+                                    )
+                                })
+                            }
+                        </View>
+                    </View>)
+        }
+        return
+
+    }
+
     render() {
         
         const { gif } = styles;
+
+        console.log("Movie media? ", this.props.movieMedia)
         
         return (
             <ScrollView style={{ flexDirection: 'column' }}>
@@ -165,6 +202,7 @@ class MovieDetail extends Component {
                 <View style={{ height: 0.5, backgroundColor: '#999', marginTop: 10, marginBottom: 10 }}/>
                 {this.renderSocial()}
                 {this.renderMedia()}
+                {this.renderArticles()}
             </ScrollView>
         );
     }
@@ -201,19 +239,28 @@ const styles = {
         height: 150,
         marginLeft: 25,
         marginRight: 25,
+    },
+    mediaCaption: {
+        fontSize: 13,
+        flex: 1,
+        textAlign: 'right',
+        marginLeft: 125, 
+        marginRight: 25,
+        marginTop: -5,
+        textShadowColor : '#999'
     }
 }
 
 const mapStateToProps = ({ movieList, movieDetail }) => {
 
     const { selectedMovie } = movieList;
-    const { shouldShowFullSynopsis } = movieDetail;
+    const { shouldShowFullSynopsis, movieMedia } = movieDetail;
 
     return {
-        selectedMovie, shouldShowFullSynopsis
+        selectedMovie, shouldShowFullSynopsis, movieMedia
     };
 };
 
-export default connect(mapStateToProps, { toggleFullSynopsis })(MovieDetail);
+export default connect(mapStateToProps, { toggleFullSynopsis, getMovieMediaSize })(MovieDetail);
 
 // export default MovieDetail;

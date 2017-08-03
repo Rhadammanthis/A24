@@ -5,17 +5,6 @@ class Transparency extends Component {
 
     componentWillMount(){
 
-        // console.log("Size: " + size)
-        // console.log("Alpha: " + alpha)
-
-        // var rows = [];
-        // for (var i=0; i < 20; i++) {
-
-        //     var alpha = ((i * 0.05) + 0.05);
-
-        //     rows.push(<View style={{height: 1, backgroundColor: `rgba(255, 0, 0, ${alpha})`}}/>);
-        // }
-
     }
 
     renderRow(){

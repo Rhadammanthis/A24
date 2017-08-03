@@ -1,10 +1,12 @@
 import { 
     SHOW_FULL_SYNOPSIS,
-    RESET_MOVIE_DETAIL_STATE
+    RESET_MOVIE_DETAIL_STATE,
+    GET_MOVIE_MEDIA_SIZE
  } from '../actions/types'
 
 const INITIAL_STATE = { 
-    shouldShowFullSynopsis: false
+    shouldShowFullSynopsis: false,
+    movieMedia: []
  };
 
 export default (state = INITIAL_STATE, action) => {
@@ -13,6 +15,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, shouldShowFullSynopsis: !state.shouldShowFullSynopsis };
         case RESET_MOVIE_DETAIL_STATE:
             return {...state, shouldShowFullSynopsis: false };
+        case GET_MOVIE_MEDIA_SIZE:
+            return {...state, movieMedia: action.payload };
         default:
             return state;
     }

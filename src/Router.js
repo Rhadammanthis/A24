@@ -6,7 +6,8 @@ import MovieDetail from './components/MovieDetail'
 
 const RouterComponent = () => {
     return (
-        <Router navigationBarStyle={styles.navBar} titleStyle={styles.navTitle} sceneStyle={styles.routerScene} >
+        <Router navigationBarStyle={styles.navBar} titleStyle={styles.navTitle} sceneStyle={styles.routerScene}
+            leftButtonIconStyle = {{ tintColor:'#999'}} >
 
             <Scene key="splash" component={Splash} initial={true} hideNavBar={true} />
             <Scene key="movieList" component={MovieList} title="Movies" hideNavBar={false} hideBackImage="true"/>

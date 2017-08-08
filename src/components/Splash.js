@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, Button, Linking, View, ActivityIndicator, Image } from 'react-native';
+import { ScrollView, Text, Button, Linking, View, ActivityIndicator, Image,
+    NetInfo } from 'react-native';
 import { connect } from 'react-redux';
-import { dataFetch } from '../actions';
+import { dataFetch,checkNetwork } from '../actions';
 import firebase from 'firebase';
 import _ from 'lodash';
 
@@ -9,26 +10,50 @@ class Splash extends Component {
 
     componentWillMount() {
 
-        this.props.dataFetch()
+        this.props.checkNetwork();
+
+    }
+
+    componentWillReceiveProps(nextProps){
+        
+        console.log('---------------------------------------')
+        if(nextProps.isConnected !== this.props.isConnected)
+            if(nextProps.isConnected == true)
+                this.props.dataFetch();
 
     }
 
     renderSpinner() {
 
-        if (this.props.filmsData === null)
+        console.log('Is connected 2', this.props.isConnected)
+
+        if(this.props.isConnected === false)
+            return(
+                <View>
+                    <Text style={{ fontSize: 30, textAlign: 'center' }}>
+                        No internet connection detected...
+                    </Text>
+                    <Text style={{ fontSize: 35, textAlign: 'center', marginTop: 10 }}>
+                        :(
+                    </Text>
+                </View>
+            )
+
+        if(this.props.filmsData === null)
             return (<ActivityIndicator
                 style={styles.centering}
                 size="large"
                 color="grey"
             />)
 
-        return <Text> Done! </Text>
     }
 
 
     render() {
 
         const { headerStyle, centering } = styles
+
+        console.log('Is connected', this.props.isConnected)
 
         return (
             <View style={{ flex: 1 }}>
@@ -68,11 +93,11 @@ const styles = {
 
 const mapStateToProps = ({ splash }) => {
 
-    const { filmsData } = splash;
+    const { filmsData, isConnected } = splash;
 
     return {
-        filmsData
+        filmsData, isConnected
     };
 };
 
-export default connect(mapStateToProps, { dataFetch })(Splash);
+export default connect(mapStateToProps, { dataFetch, checkNetwork })(Splash);

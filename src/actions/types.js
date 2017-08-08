@@ -1,3 +1,4 @@
+export const CHECK_NETWORK = 'check_network';
 export const FETCH_DATA = 'fetch_data';
 export const MOVIE_SELECTED = 'movie_selected';
 export const SHOW_FULL_SYNOPSIS = "show_full_synopsis";

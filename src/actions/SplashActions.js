@@ -1,7 +1,9 @@
 import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
+import { NetInfo } from 'react-native';
 import {
-    FETCH_DATA
+    FETCH_DATA,
+    CHECK_NETWORK
 } from './types'
 
 export const dataFetch = () => {
@@ -11,10 +13,21 @@ export const dataFetch = () => {
         firebase.database().ref(`/data`)
             .once('value', snapshot => {
                 dispatch({ type: FETCH_DATA, payload: snapshot.val() });
-
+                console.log('Called')
                 Actions.movieList();
             });
 
     };
 };
+
+export const checkNetwork = () => {
+
+    return(dispatch) => {
+        NetInfo.isConnected.fetch().then(isConnected => {
+            console.log('First, is ' + (isConnected ? 'online' : 'offline'));
+            dispatch({ type: CHECK_NETWORK, payload: isConnected });
+        });
+    }
+
+}
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { ScrollView, Text, View, ActivityIndicator, Image, List, FlatList, ListView } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import MovieListItem from './MovieListItem'
 

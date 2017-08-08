@@ -18,9 +18,11 @@ class MovieListItem extends Component {
 
     renderCredits(movie) {
         return movie.credits.map((credit, i) =>
-        <View key={i}>
-            <Text style={{ fontSize: 15 }}>{credit.credit} {credit.content} </Text>
-            
+        <View key={i} >
+            <Text>
+                <Text style={{ fontSize: 15, fontWeight: '900' }}>{credit.credit}</Text>
+                <Text style={{ fontSize: 18 }}> {credit.content} </Text>
+            </Text>
         </View>
         );
     }
@@ -32,11 +34,11 @@ class MovieListItem extends Component {
 
         return (
             <TouchableOpacity onPress={this.onRowPress.bind(this)}>
-                <View style={{ flexDirection: 'row', flex: 1, paddingBottom: 10 }}>
-                    <Image style={{ width: 110, height: 110 }}
+                <View style={{ flexDirection: 'row', flex: 1, paddingBottom: 10, marginRight: 3 }}>
+                    <Image style={{ width: 150, height: 150 }}
                         source={{ uri: movie.thumbNail }} />
                     <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 5 }}>
-                        <Text style={{ color: 'black', fontSize: 25 }}>{movie.title}</Text>
+                        <Text style={{ color: 'black', fontSize: 30 }}>{movie.title}</Text>
                         <Text style={{ fontSize: 15 }}>{movie.releaseDate ? movie.releaseDate.slice(0,4) : movie.releaseDate}</Text>
                         {this.renderCredits(movie)}
                     </View>

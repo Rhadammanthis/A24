@@ -5,6 +5,7 @@ import { Text, TouchableOpacity, View, Image, TouchableWithoutFeedback,
 import Transparency from './common/Transparency'
 import Swiper from 'react-native-swiper';
 import PopupDialog from 'react-native-popup-dialog';
+import YouTube from 'react-native-youtube'
 import { toggleFullSynopsis, getMovieMediaSize } from '../actions';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -387,6 +388,20 @@ class MovieDetail extends Component {
                 {this.renderExternalLinks()}
                 {this.renderReviews()}
                 {this.renderInstagramPosts()}
+                <YouTube
+                    apiKey="AIzaSyBHlMVZVuhFNr4Hg5Li3Ked2qutAEFrdDo"
+                    videoId="KVZ-P-ZI6W4"   // The YouTube video ID
+                    play={false}             // control playback of video with true/false
+                    fullscreen={false}       // control whether the video should play in fullscreen or inline
+                    loop={false}             // control whether the video should loop when ended
+
+                    onReady={e => this.setState({ isReady: true })}
+                    onChangeState={e => this.setState({ status: e.state })}
+                    onChangeQuality={e => this.setState({ quality: e.quality })}
+                    onError={e => this.setState({ error: e.error })}
+
+                    style={{ alignSelf: 'stretch', height: 300 }}
+                />
             </ScrollView>
         );
     }

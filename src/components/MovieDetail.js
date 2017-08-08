@@ -91,7 +91,47 @@ class MovieDetail extends Component {
                         <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10, marginBottom: 10 }}>
                             {
                                 movie.social.map((item, i) => {
-                                    return <View key={i} style={ circle } />
+
+                                    switch(item.type){
+                                        case 'Official Website':
+                                            return(
+                                                <TouchableWithoutFeedback key={i} onPress={() => { Linking.openURL(item.link) }}>
+                                                    <View style={ circle} >
+                                                        <Image style={{ width: 30, height: 30 }}
+                                                            source={require('../images/web.png')} />
+                                                    </View>
+                                                </TouchableWithoutFeedback>
+                                            )
+                                        case 'Facebook':
+                                            return(
+                                                <TouchableWithoutFeedback key={i} onPress={() => { Linking.openURL(item.link) }}>
+                                                    <View style={ circle} >
+                                                        <Image style={{ width: 30, height: 30 }}
+                                                            source={require('../images/facebook.png')} />
+                                                    </View>
+                                                </TouchableWithoutFeedback>
+                                            )
+                                        case 'Twitter':
+                                            return(
+                                                <TouchableWithoutFeedback key={i} onPress={() => { Linking.openURL(item.link) }}>
+                                                    <View style={ circle} >
+                                                        <Image style={{ width: 30, height: 30 }}
+                                                            source={require('../images/twitter.png')} />
+                                                    </View>
+                                                </TouchableWithoutFeedback>
+                                            )
+                                        case 'Instagram':
+                                            return(
+                                                <TouchableWithoutFeedback key={i} onPress={() => { Linking.openURL(item.link) }}>
+                                                    <View style={ circle} >
+                                                        <Image style={{ width: 30, height: 30 }}
+                                                            source={require('../images/instagram.png')} />
+                                                    </View>
+                                                </TouchableWithoutFeedback>
+                                            )    
+                                    }
+
+
                                 })
                             }
                         </View>
@@ -165,15 +205,15 @@ class MovieDetail extends Component {
                                     return (
                                         <View key={i}>
                                             <View style={{ flex:1, height:1, backgroundColor: '#000', marginTop: 10, marginBottom: 10 }} />
-                                            <Text style={ { fontSize: 18, fontWeight: '800' } }>
+                                            <Text style={ { fontSize: 20, fontWeight: '900' } }>
                                                 {article.title}
                                             </Text>
                                             <Image style={{ flex: 1, height: 140, marginTop: 5 }} source={{ uri: article.image}}/>
-                                            <Text style={{ fontSize: 11, fontWeight: 'bold', marginTop: 5 }}>
+                                            <Text style={{ fontSize: 10, fontWeight: 'bold', marginTop: 5 }}>
                                                 {article.source}
                                             </Text>
                                             <TouchableNativeFeedback onPress={() => { Linking.openURL(article.link) }}>
-                                                <Text>
+                                                <Text style={{ fontSize: 15 }}>
                                                     {article.summary}
                                                 </Text>
                                             </TouchableNativeFeedback>
@@ -222,6 +262,98 @@ class MovieDetail extends Component {
         }
         return
     }
+    
+    renderReviews(){
+
+        if(movie.reviews){
+            return (<View>
+                        <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25, marginTop: 10 }}>
+                            Reviews
+                        </Text>
+                        <View style={{ justifyContent: 'space-around', marginTop: 10, marginBottom: 10,
+                            paddingLeft: 25, paddingRight: 25 }}>
+                            {
+                                movie.reviews.map((review, i) => {
+                                    return (
+                                        <View key={i}>
+                                            <View style={{ flex:1, height:1, backgroundColor: '#000', marginTop: 10, marginBottom: 10 }} />
+                                            <Text style={ { fontSize: 20, fontWeight: '900' } }>
+                                                {review.title}
+                                            </Text>
+                                            <Image style={{ flex: 1, height: 140, marginTop: 5 }} source={{ uri: review.image}}/>
+                                            <Text style={{ fontSize: 10, fontWeight: 'bold', marginTop: 5 }}>
+                                                {review.source}
+                                            </Text>
+                                            <TouchableNativeFeedback onPress={() => { Linking.openURL(review.link) }}>
+                                                <Text style={{ fontSize: 15 }}>
+                                                    {review.summary}
+                                                </Text>
+                                            </TouchableNativeFeedback>
+                                        </View>
+                                    )
+                                })
+                            }
+                        </View>
+                    </View>)
+        }
+        return
+    }
+
+    renderInstagramPosts(){
+
+        const { instagramPostBackground, instagramHandle } = styles;
+
+        if(movie.instagram){
+            return (<View>
+                        <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25, marginTop: 10 }}>
+                            Instagram
+                        </Text>
+                        <View style={{ justifyContent: 'space-around', marginTop: 10, marginBottom: 10,
+                            paddingLeft: 25, paddingRight: 25 }}>
+                            {
+                                movie.instagram.map((post, i) => {
+
+                                    return post.link ? 
+                                        (<View key={i} style={ instagramPostBackground }>
+                                            <TouchableWithoutFeedback onPress={() => { Linking.openURL(post.handle) }}>
+                                                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginTop: 5, 
+                                                    marginBottom: 10 }}>
+                                                    <Text style={ instagramHandle }>
+                                                        @a24
+                                                    </Text>
+                                                    <Image style={{ height: 20, width: 20 }} source={require('../images/instagram_dark.png')} />
+                                                </View>
+                                            </TouchableWithoutFeedback>
+                                            <TouchableNativeFeedback onPress={() => { Linking.openURL(post.link) }}>
+                                                <Image style={{ flex: 1, height: 300 }} source={{ uri: post.media}}/>
+                                            </TouchableNativeFeedback>
+                                            <Text style={{ marginTop: 10 }}>
+                                                {post.caption}
+                                            </Text>
+                                        </View>)
+                                        : 
+                                        (<View key={i} style={ instagramPostBackground }>
+                                            <TouchableWithoutFeedback onPress={() => { Linking.openURL(post.handle) }}>
+                                                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginTop: 5, 
+                                                    marginBottom: 10 }}>
+                                                    <Text style={ instagramHandle }>
+                                                        @a24
+                                                    </Text>
+                                                    <Image style={{ height: 20, width: 20 }} source={require('../images/instagram_dark.png')} />
+                                                </View>
+                                            </TouchableWithoutFeedback>
+                                            <Image style={{ flex: 1, height: 300 }} source={{ uri: post.media}}/>
+                                            <Text style={{ marginTop: 10 }}>
+                                                {post.caption}
+                                            </Text>
+                                        </View>)
+                                })
+                            }
+                        </View>
+                    </View>)
+        }
+        return
+    }
 
     render() {
         
@@ -253,6 +385,8 @@ class MovieDetail extends Component {
                 {this.renderMedia()}
                 {this.renderArticles()}
                 {this.renderExternalLinks()}
+                {this.renderReviews()}
+                {this.renderInstagramPosts()}
             </ScrollView>
         );
     }
@@ -279,10 +413,13 @@ const styles = {
         height: 100
     },
     circle: {
-        width: 30,
-        height: 30,
-        borderRadius: 30/2,
-        backgroundColor: '#999'
+        width: 50,
+        height: 50,
+        borderRadius: 50/2,
+        backgroundColor: '#999',
+        alignItems: 'center', 
+        flexDirection: 'column',
+        justifyContent: 'center'
     },
     image: {
         flex: 1,
@@ -311,6 +448,17 @@ const styles = {
         backgroundColor: '#999',
         marginLeft: 1,
         marginRight: 1
+    },
+    instagramPostBackground: {
+        borderRadius: 5, 
+        borderWidth: 1, 
+        borderColor: '#fff', 
+        padding: 10,
+        backgroundColor: '#DDD', 
+        marginTop: 10
+    },
+    instagramHandle: {
+        flex: 1
     }
 }
 

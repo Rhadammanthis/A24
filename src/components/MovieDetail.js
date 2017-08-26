@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     Text, TouchableOpacity, View, Image, TouchableWithoutFeedback,
     ScrollView, LayoutAnimation, Button, TouchableNativeFeedback,
-    ActivityIndicator, Linking
+    ActivityIndicator, Linking, BackHandler
 } from 'react-native';
 import Transparency from './common/Transparency'
 import Swiper from 'react-native-swiper';

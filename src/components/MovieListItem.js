@@ -8,7 +8,7 @@ class MovieListItem extends Component {
 
     onRowPress() {
 
-        if(this.props.movie.synopsis){
+        if(Object.keys(this.props.movie).length > 4){
             
             this.props.resetState();
             this.props.movieSelected(this.props.movie)

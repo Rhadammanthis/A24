@@ -1,5 +1,5 @@
 import React from 'react';
-import { Scene, Router, Actions, StyleSheet } from 'react-native-router-flux';
+import { Scene, Router, Actions, ActionConst } from 'react-native-router-flux';
 import Splash from './components/Splash'
 import MovieList from './components/MovieList'
 import MovieDetail from './components/MovieDetail'
@@ -10,8 +10,10 @@ const RouterComponent = () => {
             leftButtonIconStyle = {{ tintColor:'#999'}} >
 
             <Scene key="splash" component={Splash} initial={true} hideNavBar={true} />
-            <Scene key="movieList" component={MovieList} title="Movies" hideNavBar={false} hideBackImage="true"/>
-            <Scene key="movieDetail" component={MovieDetail} hideNavBar={false} />
+            <Scene key="content" type={ActionConst.RESET}>
+                <Scene key="movieList" component={MovieList} title="Movies" hideNavBar={false} hideBackImage="true"/>
+                <Scene key="movieDetail" component={MovieDetail} hideNavBar={false} />
+            </Scene>
 
         </Router>
 

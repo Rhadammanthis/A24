@@ -32,6 +32,13 @@ export const getMovieMediaSize = (movieMedia) => {
 
                 console.log("Item ", movieMedia)
                 done(null, movieMedia);
+            }, () => {
+
+                var movieMedia = {}
+                movieMedia.media = item
+                movieMedia.aspectRatio = 1
+
+                done(null, movieMedia);
             });
         }
 

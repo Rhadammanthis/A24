@@ -1,9 +1,11 @@
+import { Animated } from 'react-native';
 import { 
     MOVIE_SELECTED
  } from '../actions/types'
 
 const INITIAL_STATE = { 
-    selectedMovie: null
+    selectedMovie: null,
+    animatedFade: new Animated.Value(0)
  };
 
 export default (state = INITIAL_STATE, action) => {

@@ -1,3 +1,4 @@
+import { Animated } from 'react-native';
 import { 
     FETCH_DATA,
     CHECK_NETWORK
@@ -5,7 +6,9 @@ import {
 
 const INITIAL_STATE = { 
     filmsData: null,
-    isConnected: null
+    isConnected: null,
+    animatedScale: new Animated.Value(1),
+    animatedFade: new Animated.Value(1)
  };
 
 export default (state = INITIAL_STATE, action) => {

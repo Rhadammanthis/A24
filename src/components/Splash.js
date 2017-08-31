@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, Button, Linking, View, ActivityIndicator, Image,
-    NetInfo } from 'react-native';
+import {
+    ScrollView, Text, Button, Linking, View, ActivityIndicator, Image,
+    NetInfo, Animated, TouchableWithoutFeedback
+} from 'react-native';
 import { connect } from 'react-redux';
-import { dataFetch,checkNetwork } from '../actions';
+import { dataFetch, checkNetwork } from '../actions';
 import firebase from 'firebase';
 import _ from 'lodash';
+import { Actions } from 'react-native-router-flux';
 
 class Splash extends Component {
 
@@ -14,11 +17,11 @@ class Splash extends Component {
 
     }
 
-    componentWillReceiveProps(nextProps){
-        
+    componentWillReceiveProps(nextProps) {
+
         console.log('---------------------------------------')
-        if(nextProps.isConnected !== this.props.isConnected)
-            if(nextProps.isConnected == true)
+        if (nextProps.isConnected !== this.props.isConnected)
+            if (nextProps.isConnected == true)
                 this.props.dataFetch();
 
     }
@@ -27,8 +30,8 @@ class Splash extends Component {
 
         console.log('Is connected 2', this.props.isConnected)
 
-        if(this.props.isConnected === false)
-            return(
+        if (this.props.isConnected === false)
+            return (
                 <View>
                     <Text style={{ fontSize: 30, textAlign: 'center' }}>
                         No internet connection detected...
@@ -39,12 +42,13 @@ class Splash extends Component {
                 </View>
             )
 
-        if(this.props.filmsData === null)
-            return (<ActivityIndicator
-                style={styles.centering}
-                size="large"
-                color="grey"
-            />)
+            return (
+                <ActivityIndicator
+                    style={styles.centering}
+                    size="large"
+                    color="grey"
+                />
+            )
 
     }
 
@@ -55,21 +59,56 @@ class Splash extends Component {
 
         console.log('Is connected', this.props.isConnected)
 
+        if (this.props.filmsData !== null) {
+
+            Animated.sequence([
+                Animated.timing(
+                    this.props.animatedScale,
+                    {
+                        toValue: 1.5,
+                        duration: 155,
+                    }
+    
+                ),
+                Animated.stagger(100, [
+                    Animated.timing(
+                        this.props.animatedScale,
+                        {
+                            toValue: 0.0,
+                            duration: 480
+                        }
+        
+                    ),
+                    Animated.timing(
+                        this.props.animatedFade,
+                        {
+                            toValue: 0,
+                            duration: 200,
+                        }
+                    )
+                ])
+            ]).start(onComplete = () => {
+                Actions.content();
+            })
+
+        }
+
         return (
             <View style={{ flex: 1 }}>
-                <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-
-                    <Image
-                        style={{
-                            width: 250, height: 250
-                        }}
-                        source={require('../images/logo.png')}
-                    />
-                </View>
-                {this.renderSpinner()}
+                <Animated.View style={{ transform: [{ scale: this.props.animatedScale }], opacity: this.props.animatedFade }}>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Image
+                            style={{
+                                width: 250, height: 250
+                            }}
+                            source={require('../images/logo.png')}
+                        />
+                    </View>
+                    {this.renderSpinner()}
+                </Animated.View>
             </View>
 
         );
@@ -93,10 +132,10 @@ const styles = {
 
 const mapStateToProps = ({ splash }) => {
 
-    const { filmsData, isConnected } = splash;
+    const { filmsData, isConnected, animatedScale, animatedFade } = splash;
 
     return {
-        filmsData, isConnected
+        filmsData, isConnected, animatedScale, animatedFade
     };
 };
 

@@ -14,7 +14,6 @@ export const dataFetch = () => {
             .once('value', snapshot => {
                 dispatch({ type: FETCH_DATA, payload: snapshot.val() });
                 console.log('Called')
-                Actions.content();
             });
 
     };

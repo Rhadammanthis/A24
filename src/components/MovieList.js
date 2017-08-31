@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, View, ActivityIndicator, Image, List, FlatList, ListView } from 'react-native';
+import { ScrollView, Text, View, ActivityIndicator, Image, List, FlatList, ListView,
+    Animated } from 'react-native';
 import { connect } from 'react-redux';
 import MovieListItem from './MovieListItem'
 
@@ -9,6 +10,18 @@ class MovieList extends Component {
 
         this.createDataSource(this.props.filmsData);
 
+    }
+
+    componentDidMount(){
+        Animated.timing(
+            this.props.animatedFade,
+            {
+                toValue: 1.0,
+                duration: 300,
+            }
+        ).start(onComplete = () => {
+            // empty callback
+        })
     }
 
     createDataSource(filmsData) {
@@ -50,13 +63,13 @@ class MovieList extends Component {
     render() {
 
         return (
-            <View>
+            <Animated.View style={{ opacity: this.props.animatedFade }}>
                 <ListView
                     dataSource={this.dataSource}
                     renderRow={this.renderRow}
                     renderSectionHeader={this.renderSectionHeader}
                 />
-            </View>
+            </Animated.View>
         )
     }
 
@@ -65,12 +78,13 @@ class MovieList extends Component {
 const styles = {
 }
 
-const mapStateToProps = ({ splash }) => {
+const mapStateToProps = ({ splash, movieList }) => {
 
     const { filmsData } = splash;
+    const { animatedFade } = movieList;
 
     return {
-        filmsData
+        filmsData, animatedFade
     };
 };
 

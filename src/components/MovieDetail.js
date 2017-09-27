@@ -14,8 +14,6 @@ import { connect } from 'react-redux';
 
 class MovieDetail extends Component {
 
-    state = { showFullText: false };
-
     media = [];
 
     componentWillUpdate() {
@@ -39,10 +37,10 @@ class MovieDetail extends Component {
         });
     }
 
-    renderTrailer(){
-        if(movie.trailers)
-            return(
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    renderTrailer() {
+        if (movie.trailers)
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Image style={{ height: 160, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
                         source={{ uri: movie.trailers[0].thumbNailURL }} />
                     <View style={{ opacity: 1 }}>
@@ -79,13 +77,6 @@ class MovieDetail extends Component {
         );
     }
 
-    showFullText() {
-        if (this.props.shouldShowFullSynopsis)
-            return {}
-        else
-            return { height: 150 }
-    }
-
     renderTextTransparency() {
         if (this.props.shouldShowFullSynopsis)
             return
@@ -100,8 +91,8 @@ class MovieDetail extends Component {
             return (
                 <View>
                     <TouchableWithoutFeedback
-                        onPress={() => this.props.toggleFullSynopsis()}>
-                        <View style={this.showFullText()}>
+                        onPress={() => { this.props.toggleFullSynopsis() }}>
+                        <View style={{ height: this.props.synopsisSize }}>
                             <Text style={{ color: 'black', fontSize: 15, paddingLeft: 25, paddingRight: 25 }}>
                                 {movie.synopsis}
                             </Text>
@@ -114,12 +105,37 @@ class MovieDetail extends Component {
         return;
     }
 
+    renderPosters() {
+        if (movie.posters) {
+            return (
+                <View>
+                    <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25 }}>
+                        {movie.posters.length > 1 ? "Posters" : "Poster"}
+                    </Text>
+                    <View style={{}}>
+                        {
+                            movie.posters.map((item, i) => {
+                                return (
+                                    <Image key={i} style={{
+                                            flex: 1, height: 530,
+                                            marginLeft: 25, marginRight: 25, marginTop: 10
+                                        }} resizeMode={'contain'}
+                                            source={{ uri: item.imgURL }} />
+                                );
+                            })
+                        }
+                    </View>
+                </View>
+            )
+        }
+    }
+
     renderSocial() {
         const { circle } = styles;
 
         if (movie.social) {
             return (<View>
-                <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25 }}>
+                <Text style={{ color: 'black', fontSize: 25, paddingLeft: 25, paddingRight: 25, marginTop: 10 }}>
                     Social
                         </Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10, marginBottom: 10 }}>
@@ -432,6 +448,7 @@ class MovieDetail extends Component {
                 </InViewPort>
                 {this.renderSynopsis()}
                 <View style={{ height: 0.5, backgroundColor: '#999', marginTop: 10, marginBottom: 10 }} />
+                {this.renderPosters()}
                 {this.renderSocial()}
                 {this.renderMedia()}
                 {this.renderArticles()}
@@ -516,10 +533,11 @@ const styles = {
 const mapStateToProps = ({ movieList, movieDetail }) => {
 
     const { selectedMovie } = movieList;
-    const { shouldShowFullSynopsis, movieMedia, mediaLoaded } = movieDetail;
+    const { shouldShowFullSynopsis, movieMedia, mediaLoaded, synopsisSize } = movieDetail;
 
     return {
-        selectedMovie, shouldShowFullSynopsis, movieMedia, mediaLoaded
+        selectedMovie, shouldShowFullSynopsis, movieMedia, mediaLoaded,
+        synopsisSize
     };
 };
 
